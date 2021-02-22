@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Preprocessor.js</title>
+<style>
+	#input {
+		margin: 50px auto;
+		width: 50vw;
+		display: flex;
+		align-items: flex-end;
+	}
+	textarea {
+		width: 80%;
+		height: 10vh;
+		padding: 20px;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
+		font-size: 1.5rem;
+		color: darkgrey;
+		border: 2px solid #a8a8a8;
+	}
+	textarea:focus {
+		border: 2px solid #0051ff;
+	}
+	button {
+		margin-left: 10px;
+		height: 3rem;
+		/* background-color: #2b4ad4; */
+		color: #000000;
+		border: 2px solid #a8a8a8;
+		border-radius: 5px;
+	}
+
+	#input button {	width: calc(20%-10px);}
+
+	#results {
+		width: 60vw;
+		margin: 100px auto;
+		background-color: #e7e7e7;
+		padding: 50px;
+		display: none;
+		position: relative;
+		user-select: all;
+	}
+
+	#results > button {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+	}
+
+
+</style>
+</head>
+<body>
+
+	<div id="input">
+		<textarea id="textField" type="text" placeholder="Paste text here" autofocus></textarea>
+		<button onclick="pepText()">Pre-process</button>
+	</div>
+	<div id="results"><button onclick="document.execCommand('copy')">Copy to clipbaord</button><pre id="cleanedup"></pre></div>
+
+	<script>
+		// trim(); double space or \n's
+		document.getElementById("textField").value = ""; // start with an empty textbox
+		function pepText() {
+			var inputText = document.getElementById("textField").value;
+// some basic cleanup
+			inputText =	inputText.trim();
+			inputText =	inputText.replace(/ +/gu, " ");
+			inputText =	inputText.replace(/\n+/gu, "\n");
+
+			inputText = inputText.replace(/^/gmu,"<p>").replace(/$/gmu,"</p>");  // add Ps at beginning and end of lines
+			inputText =	inputText.replace(/ ?— ?/gu, "— "); // more to do with spaces and dashes!
+			inputText =	inputText.replace(/ /gu,"</span>\n\t\t<span>"); // split on spaces with <span>
+			inputText =	inputText.replace(/<p>/gu,"<p>\n\t\t<span>"); // address first words of line
+			inputText =	inputText.replace(/<\/p>/gu,"</span>\n</p>"); // and last words of line
+			inputText =	inputText.replace(/([,.;:?!—()‘’“”\u0387\u037E\u00B7]+)(<\/span>)/gu, "$2$1"); // move punctuation after
+			inputText =	inputText.replace(/(<span>)([,.;:?!—()‘’“”\u0387\u037E\u00B7]+)/gu, "$2$1"); // or before
+			document.getElementById("cleanedup").textContent = inputText;
+			document.getElementById("results").style.display = "flex";
+		}
+	</script>
+
+</body>
+</html>
