@@ -79,7 +79,7 @@
 			inputText =	inputText.replace(/<\/p>/gu,"</span>\n</p>"); // and last words of line
 			inputText =	inputText.replace(/([,.;:?!—()‘’“”\u0387\u037E\u00B7]+)(<\/span>)/gu, "$2$1"); // move punctuation after
 			inputText =	inputText.replace(/(<span>)([,.;:?!—()‘’“”\u0387\u037E\u00B7]+)/gu, "$2$1"); // or before
-			inputText =	inputText.replace(/<span>/gu, "<span data-cite='' data-lookup='' data-dict='' data-pos='' data-def=''>"); // and the data-attrs
+			inputText =	inputText.replace(/<span>/gu, "<span data-cite=''>"); // and the first data-attr
 			document.getElementById("cleanedup").textContent = inputText;
 			document.getElementById("results").style.display = "flex";
 		}
